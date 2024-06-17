@@ -1,5 +1,6 @@
 package com.black.todo.user;
 
+import com.black.todo.todo.TaskList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskList> taskLists = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,5 +66,17 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public TaskList createTaskList(String title) {
+        TaskList taskList = new TaskList();
+        taskList.setTitle(title);
+        taskList.setUser(this);
+        taskLists.add(taskList);
+        return taskList;
+    }
+
+    public List<TaskList> getTaskLists() {
+        return taskLists;
     }
 }
