@@ -1,12 +1,15 @@
 package com.black.todo.todo;
 
 import com.black.todo.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,22 +20,25 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
+@Table(name = "task_list")
 public class TaskList {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Task> tasks = new ArrayList<>();
 
-    public Task addTask(String description, Date dueDate, int priority) {
+    public Task addTask(String description, LocalDate dueDate, int priority) {
         Task task = new Task();
         task.setDescription(description);
         task.setDueDate(dueDate);

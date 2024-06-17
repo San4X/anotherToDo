@@ -1,6 +1,7 @@
 package com.black.todo.user;
 
 import com.black.todo.todo.TaskList;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,7 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<TaskList> taskLists = new ArrayList<>();
 
     @Override
