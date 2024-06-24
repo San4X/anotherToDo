@@ -1,5 +1,7 @@
 package com.black.todo.todo;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +17,10 @@ public class TaskController {
 
     private final TaskService taskService;
 
-//    @PostMapping
-//    public ResponseEntity<Task> addTask(@RequestParam String description,
-//                                        @RequestParam Date dueDate,
-//                                        @RequestParam int priority,
-//                                        @RequestParam Integer taskListId) {
-//        return ResponseEntity.ok(taskService.addTask(description, dueDate, priority, taskListId));
-//    }
+
+@Operation(
+        description = "Add new task"
+)
     @PostMapping
     public ResponseEntity<Task> addTask(
             @RequestBody TaskRequest request
@@ -30,11 +29,10 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<Task>> getTasks(@RequestParam Integer taskListId) {
-//        return ResponseEntity.ok(taskService.getTasks(taskListId));
-//    }
 
+    @Operation(
+            description = "Get all tasks from certain task list"
+    )
     @GetMapping("/{taskListId}")
     public ResponseEntity<List<Task>> getTasks(
             @PathVariable Integer taskListId
@@ -44,34 +42,21 @@ public class TaskController {
     }
 
 
-//    @PostMapping("/{taskId}/complete")
-//    public ResponseEntity<Void> markTaskAsComplete(@PathVariable Integer taskId) {
-//        taskService.markTaskAsComplete(taskId);
-//        return ResponseEntity.noContent().build();
-//    }
-
-    @PutMapping("/{taskId}/complete")
-    public ResponseEntity<Task> markAsComplete(@PathVariable Integer taskId) {
-        Task task = taskService.markAsComplete(taskId);
+    @Operation(
+            description = "Mark task as complete"
+    )
+    @PatchMapping("/{taskId}/marktask/{complete}")
+    public ResponseEntity<Task> markTask(@PathVariable Integer taskId,
+                                         @PathVariable Boolean complete) {
+        Task task = taskService.markTask(taskId, complete);
         return ResponseEntity.ok(task);
     }
 
-//    @PostMapping("/{taskId}/reminder")
-//    public ResponseEntity<Void> setTaskReminder(@PathVariable Integer taskId, @RequestParam Date reminder) {
-//        taskService.setTaskReminder(taskId, reminder);
-//        return ResponseEntity.noContent().build();
-//    }
 
-//    @PutMapping("/{taskId}/reminder")
-//    public ResponseEntity<Task> setReminder(
-//            @PathVariable Integer taskId,
-//            @RequestParam LocalDateTime reminder
-//    ) {
-//        Task task = taskService.setReminder(taskId, reminder);
-//        return ResponseEntity.ok(task);
-//    }
-
-    @PutMapping("/reminder")
+    @Operation(
+            description = "Set reminder in format year-month-dayThour:minute:second"
+    )
+    @PatchMapping("/reminder")
     public ResponseEntity<Task> setReminder(
             @RequestBody TaskRequest request
     ) {
@@ -79,13 +64,11 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-//    @DeleteMapping("/{taskId}")
-//    public ResponseEntity<Void> deleteTask(@PathVariable Integer taskId) {
-//        taskService.deleteTask(taskId);
-//        return ResponseEntity.noContent().build();
-//    }
 
-    @DeleteMapping("/{taskId}")
+    @Operation(
+            description = "Delete task"
+    )
+    @DeleteMapping("/delete/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Integer taskId) {
         taskService.deleteTask(taskId);
         return ResponseEntity.noContent().build();

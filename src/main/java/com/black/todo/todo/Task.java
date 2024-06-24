@@ -33,12 +33,4 @@ public class Task {
     @JoinColumn(name = "task_list_id", nullable = false)
     @JsonManagedReference
     private TaskList taskList;
-
-//    public void markAsComplete() {
-//        this.status = "COMPLETED";
-//    }
-
-//    public void setReminder(LocalDateTime reminder) {
-//        this.reminder = reminder;
-//    }
 }

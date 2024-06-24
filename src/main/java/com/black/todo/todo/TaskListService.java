@@ -16,12 +16,6 @@ public class TaskListService {
     private final TaskListRepository taskListRepository;
     private final UserRepository userRepository;
 
-//    public TaskList createTaskList(String title, String email) {
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//        TaskList taskList = user.createTaskList(title); //TaskList taskList = user.createTaskList(title);
-//        return taskListRepository.save(taskList);
-//    }
 
     public TaskList createTaskList(String title, String email) {
         User user = userRepository.findByEmail(email)
@@ -36,9 +30,6 @@ public class TaskListService {
         return taskListRepository.save(taskList);
     }
 
-//    public List<TaskList> getTaskLists(Integer userId) {
-//        return taskListRepository.findByUserId(userId);
-//    }
 
     public List<TaskList> getTaskLists(String email) {
         User user = userRepository.findByEmail(email)
